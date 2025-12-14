@@ -1,21 +1,19 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Box,
   Container,
   Typography,
   Button,
   Paper,
-  ThemeProvider,
   AppBar,
   Toolbar,
   IconButton,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { AuthProvider, useAuth } from '@/contexts/AuthContext';
-import theme from '@/contexts/theme';
+import { useAuth } from '@/contexts/AuthContext';
 import Sidebar from '@/components/Sidebar';
 import AddItemModal from '@/components/AddItemModal';
 import { useRouter } from 'next/navigation';
@@ -23,8 +21,14 @@ import { useRouter } from 'next/navigation';
 function AssuntoPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [items, setItems] = useState<string[]>([]);
-  const { logout } = useAuth();
+  const { logout, isAuthenticated } = useAuth();
   const router = useRouter();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.push('/');
+    }
+  }, [isAuthenticated, router]);
 
   const handleAddItem = (name: string) => {
     setItems([...items, name]);
@@ -88,11 +92,5 @@ function AssuntoPage() {
 }
 
 export default function Page() {
-  return (
-    <ThemeProvider theme={theme}>
-      <AuthProvider>
-        <AssuntoPage />
-      </AuthProvider>
-    </ThemeProvider>
-  );
+  return <AssuntoPage />;
 }

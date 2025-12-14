@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Box,
@@ -9,11 +8,9 @@ import {
   TextField,
   Button,
   Typography,
-  ThemeProvider,
 } from '@mui/material';
 import { useState } from 'react';
-import { AuthProvider, useAuth } from '@/contexts/AuthContext';
-import theme from '@/contexts/theme';
+import { useAuth } from '@/contexts/AuthContext';
 
 function LoginPage() {
   const [username, setUsername] = useState('');
@@ -99,11 +96,5 @@ function LoginPage() {
 }
 
 export default function Home() {
-  return (
-    <ThemeProvider theme={theme}>
-      <AuthProvider>
-        <LoginPage />
-      </AuthProvider>
-    </ThemeProvider>
-  );
+  return <LoginPage />;
 }
