@@ -37,7 +37,7 @@ export const useSubjects = () => {
   );
 
   const updateExistingSubject = useCallback(
-    (data: UpdateSubjectRequest) => {
+    (data: UpdateSubjectRequest & { id: string }) => {
       return dispatch(updateSubject(data));
     },
     [dispatch]

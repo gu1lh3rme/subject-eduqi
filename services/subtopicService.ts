@@ -33,8 +33,8 @@ export const subtopicApi = {
   },
 
   // Atualizar subtopic
-  update: async (data: UpdateSubtopicRequest): Promise<Subtopic> => {
-    const response = await api.patch<Subtopic>(`/subtopics/${data.id}`, data);
+  update: async ({ id, ...data }: UpdateSubtopicRequest & { id: string }): Promise<Subtopic> => {
+    const response = await api.patch<Subtopic>(`/subtopics/${id}`, data);
     return response.data;
   },
 

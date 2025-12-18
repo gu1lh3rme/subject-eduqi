@@ -174,8 +174,9 @@ export default function SubjectsManagerTree() {
       }
     } else {
       // Buscar o subtópico na estrutura aninhada para edição
+      let foundSubtopic = null;
       for (const subject of subjects) {
-        const foundSubtopic = findSubtopicInTree(subject.subtopics || [], id);
+        foundSubtopic = findSubtopicInTree(subject.subtopics || [], id);
         if (foundSubtopic) {
           selectSubtopic(foundSubtopic);
           setFormData({ name: foundSubtopic.name });
@@ -233,45 +234,44 @@ export default function SubjectsManagerTree() {
   };
 
   const handleSubmit = async () => {
-    if (!formData.name.trim()) return;
+    if (!formData.name.trim()) {
+      console.warn('⚠️ Form data name is empty');
+      return;
+    }
 
     try {
       if (currentNodeType === 'subject') {
         if (editMode && selectedSubject) {
           const updateData: UpdateSubjectRequest = {
-            id: selectedSubject.id,
             name: formData.name,
           };
-          await updateExistingSubject(updateData);
+          await updateExistingSubject({ id: selectedSubject.id, ...updateData });
         } else {
           const createData: CreateSubjectRequest = {
             name: formData.name,
           };
           await createNewSubject(createData);
         }
-      } else if (parentNode) {
+      } else if (currentNodeType === 'subtopic') {
         if (editMode && selectedSubtopic) {
           const updateData: UpdateSubtopicRequest = {
-            id: selectedSubtopic.id,
             name: formData.name,
             subjectId: selectedSubtopic.subjectId, // Sempre manter o subjectId original
             parentId: selectedSubtopic.parentId,
           };
-          await updateExistingSubtopic(updateData);
-        } else {
-          // Garantir que sempre temos um subjectId válido
+          await updateExistingSubtopic({ id: selectedSubtopic.id, ...updateData });
+        } else if (parentNode) {
           const subjectId = getSubjectIdForSubtopic(parentNode);
           
           const createData: CreateSubtopicRequest = {
             name: formData.name,
-            subjectId: subjectId, // Sempre obrigatório
+            subjectId: subjectId,
             parentId: parentNode.type === 'subtopic' ? parentNode.id : undefined,
           };
           await createNewSubtopic(createData);
         }
       }
       
-      // Recarregar dados para atualizar a árvore
       await reloadAllData();
       handleCloseDialog();
     } catch (error) {
@@ -418,7 +418,7 @@ export default function SubjectsManagerTree() {
   return (
     <Box sx={{ p: 3 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
-        <Typography variant="h4" component="h1">
+        <Typography variant="h6" component="h6">
           Gerenciar Assuntos e Subtópicos
         </Typography>
         <Button

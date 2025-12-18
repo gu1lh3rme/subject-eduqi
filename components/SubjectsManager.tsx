@@ -30,7 +30,7 @@ import {
 import { Add, Edit, Delete, KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
 import { useSubjects } from '@/hooks/useSubjects';
 import { useSubtopics } from '@/hooks/useSubtopics';
-import { CreateSubjectRequest, UpdateSubjectRequest, CreateSubtopicRequest, UpdateSubtopicRequest } from '@/types';
+import { CreateSubjectRequest, UpdateSubjectRequest, CreateSubtopicRequest, UpdateSubtopicRequest, Subject } from '@/types';
 
 interface ExpandedRowState {
   [key: string]: boolean;
@@ -159,10 +159,9 @@ export default function SubjectsManager() {
     try {
       if (editMode && selectedSubject) {
         const updateData: UpdateSubjectRequest = {
-          id: selectedSubject.id,
           name: formData.name,
         };
-        await updateExistingSubject(updateData);
+        await updateExistingSubject({ id: selectedSubject.id, ...updateData });
       } else {
         const createData: CreateSubjectRequest = {
           name: formData.name,
@@ -181,11 +180,10 @@ export default function SubjectsManager() {
     try {
       if (subtopicEditMode && selectedSubtopic) {
         const updateData: UpdateSubtopicRequest = {
-          id: selectedSubtopic.id,
           name: subtopicFormData.name,
           subjectId: subtopicFormData.subjectId,
         };
-        await updateExistingSubtopic(updateData);
+        await updateExistingSubtopic({ id: selectedSubtopic.id, ...updateData });
       } else {
         const createData: CreateSubtopicRequest = {
           name: subtopicFormData.name,
@@ -251,7 +249,7 @@ export default function SubjectsManager() {
   return (
     <Box sx={{ p: 3 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
-        <Typography variant="h4" component="h1">
+        <Typography variant="h6" component="h6">
           Gerenciar Assuntos e Subtópicos
         </Typography>
         <Button
@@ -285,7 +283,7 @@ export default function SubjectsManager() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {subjects?.map((subject) => {
+              {subjects?.map((subject: Subject) => {
                 const subtopics = getSubtopicsForSubject(subject.id);
                 return (
                   <>

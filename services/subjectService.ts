@@ -21,8 +21,8 @@ export const subjectApi = {
   },
 
   // Atualizar subject
-  update: async (data: UpdateSubjectRequest): Promise<Subject> => {
-    const response = await api.patch<Subject>(`/subjects/${data.id}`, data);
+  update: async ({ id, ...data }: UpdateSubjectRequest & { id: string }): Promise<Subject> => {
+    const response = await api.patch<Subject>(`/subjects/${id}`, data);
     return response.data;
   },
 

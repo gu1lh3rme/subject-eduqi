@@ -46,7 +46,7 @@ export const useSubtopics = () => {
   );
 
   const updateExistingSubtopic = useCallback(
-    (data: UpdateSubtopicRequest) => {
+    (data: UpdateSubtopicRequest & { id: string }) => {
       return dispatch(updateSubtopic(data));
     },
     [dispatch]

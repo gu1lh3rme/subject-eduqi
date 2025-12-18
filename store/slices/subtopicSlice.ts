@@ -69,7 +69,7 @@ export const createSubtopic = createAsyncThunk(
 
 export const updateSubtopic = createAsyncThunk(
   'subtopics/updateSubtopic',
-  async (data: UpdateSubtopicRequest, { rejectWithValue }) => {
+  async (data: UpdateSubtopicRequest & { id: string }, { rejectWithValue }) => {
     try {
       const subtopic = await subtopicApi.update(data);
       return subtopic;

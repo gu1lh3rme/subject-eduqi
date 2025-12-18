@@ -21,7 +21,6 @@ export interface CreateSubjectRequest {
 }
 
 export interface UpdateSubjectRequest {
-  id: string;
   name: string;
 }
 
@@ -32,7 +31,6 @@ export interface CreateSubtopicRequest {
 }
 
 export interface UpdateSubtopicRequest {
-  id: string;
   name: string;
   subjectId?: string;
   parentId?: string;

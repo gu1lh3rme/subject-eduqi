@@ -55,7 +55,7 @@ export const createSubject = createAsyncThunk(
 
 export const updateSubject = createAsyncThunk(
   'subjects/updateSubject',
-  async (data: UpdateSubjectRequest, { rejectWithValue }) => {
+  async (data: UpdateSubjectRequest & { id: string }, { rejectWithValue }) => {
     try {
       const subject = await subjectApi.update(data);
       return subject;
