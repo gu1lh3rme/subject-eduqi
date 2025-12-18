@@ -16,9 +16,13 @@
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^7.3.6",
     "@mui/material": "^7.3.6",
+    "@mui/x-tree-view": "^8.22.0",
+    "@reduxjs/toolkit": "^2.11.2",
+    "axios": "^1.13.2",
     "next": "^16.0.10",
     "react": "^19.2.3",
-    "react-dom": "^19.2.3"
+    "react-dom": "^19.2.3",
+    "react-redux": "^9.2.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.57.0",

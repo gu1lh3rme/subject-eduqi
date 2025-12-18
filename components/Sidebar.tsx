@@ -11,21 +11,33 @@ import {
   Box,
   Typography,
   Divider,
+  Avatar,
+  Button,
+  Stack,
 } from '@mui/material';
 import SubjectIcon from '@mui/icons-material/Subject';
 import QuizIcon from '@mui/icons-material/Quiz';
+import LogoutIcon from '@mui/icons-material/Logout';
+import PersonIcon from '@mui/icons-material/Person';
 import { useRouter, usePathname } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
 
 const drawerWidth = 240;
 
 export default function Sidebar() {
   const router = useRouter();
   const pathname = usePathname();
+  const { user, logout, loading } = useAuth();
 
   const menuItems = [
     { text: 'Assunto', icon: <SubjectIcon />, path: '/assunto' },
     { text: 'Questões', icon: <QuizIcon />, path: '/questoes' },
   ];
+
+  const handleLogout = async () => {
+    await logout();
+    router.push('/login');
+  };
 
   return (
     <Drawer
@@ -45,7 +57,7 @@ export default function Sidebar() {
         </Typography>
       </Toolbar>
       <Divider />
-      <Box sx={{ overflow: 'auto' }}>
+      <Box sx={{ overflow: 'auto', flex: 1 }}>
         <List>
           {menuItems.map((item) => (
             <ListItem key={item.text} disablePadding>
@@ -61,6 +73,39 @@ export default function Sidebar() {
             </ListItem>
           ))}
         </List>
+      </Box>
+
+      {/* User info and logout */}
+      <Box sx={{ p: 2, borderTop: 1, borderColor: 'divider' }}>
+        {user && (
+          <Stack spacing={1}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Avatar sx={{ width: 32, height: 32 }}>
+                <PersonIcon />
+              </Avatar>
+              <Box sx={{ overflow: 'hidden' }}>
+                <Typography variant="body2" fontWeight="medium" noWrap>
+                  {user.name}
+                </Typography>
+                {user.email && (
+                  <Typography variant="caption" color="text.secondary" noWrap>
+                    {user.email}
+                  </Typography>
+                )}
+              </Box>
+            </Box>
+            <Button
+              variant="outlined"
+              size="small"
+              startIcon={<LogoutIcon />}
+              onClick={handleLogout}
+              disabled={loading}
+              sx={{ justifyContent: 'flex-start' }}
+            >
+              Sair
+            </Button>
+          </Stack>
+        )}
       </Box>
     </Drawer>
   );
