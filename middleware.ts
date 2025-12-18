@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
   // Rotas que não precisam de autenticação
-  const publicPaths = ['/login'];
+  const publicPaths = ['/login', '/register'];
   
   const { pathname } = request.nextUrl;
   

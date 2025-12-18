@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import {
   Box,
   Card,
@@ -12,6 +13,7 @@ import {
   Alert,
   CircularProgress,
   Container,
+  Link as MuiLink,
 } from '@mui/material';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -170,6 +172,17 @@ export default function LoginPage() {
                   'Entrar'
                 )}
               </Button>
+
+              <Box sx={{ textAlign: 'center', mt: 2 }}>
+                <Typography variant="body2">
+                  Não tem uma conta?{' '}
+                  <Link href="/register" passHref>
+                    <MuiLink component="span" sx={{ cursor: 'pointer' }}>
+                      Criar conta aqui
+                    </MuiLink>
+                  </Link>
+                </Typography>
+              </Box>
             </Box>
           </CardContent>
         </Card>

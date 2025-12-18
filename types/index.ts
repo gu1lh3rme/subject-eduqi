@@ -50,3 +50,48 @@ export interface TreeNode {
   subjectId?: string;
   parentId?: string;
 }
+
+export interface Question {
+  id: string;
+  statement: string;
+  alternativeA: string;
+  alternativeB: string;
+  alternativeC: string;
+  alternativeD: string;
+  alternativeE: string;
+  correctAlternative: 'A' | 'B' | 'C' | 'D' | 'E';
+  subjectId: string;
+  subtopicId?: string;
+  difficulty: string;
+  status: 'rascunho' | 'aprovado' | 'reprovado';
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface CreateQuestionRequest {
+  statement: string;
+  alternativeA: string;
+  alternativeB: string;
+  alternativeC: string;
+  alternativeD: string;
+  alternativeE: string;
+  correctAlternative: 'A' | 'B' | 'C' | 'D' | 'E';
+  subjectId: string;
+  subtopicId?: string;
+  difficulty: string;
+  status: 'rascunho' | 'aprovado' | 'reprovado';
+}
+
+export interface UpdateQuestionRequest {
+  statement?: string;
+  alternativeA?: string;
+  alternativeB?: string;
+  alternativeC?: string;
+  alternativeD?: string;
+  alternativeE?: string;
+  correctAlternative?: 'A' | 'B' | 'C' | 'D' | 'E';
+  subjectId?: string;
+  subtopicId?: string;
+  difficulty?: string;
+  status?: 'rascunho' | 'aprovado' | 'reprovado';
+}

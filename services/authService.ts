@@ -5,6 +5,12 @@ export interface LoginRequest {
   password: string;
 }
 
+export interface RegisterRequest {
+  name: string;
+  email: string;
+  password: string;
+}
+
 export interface LoginResponse {
   access_token: string;
   user: {
@@ -19,6 +25,17 @@ export const authApi = {
   login: async (data: LoginRequest): Promise<LoginResponse> => {
     try {
       const response = await api.post<LoginResponse>('/auth/login', data);
+      return response.data;
+    } catch (error: any) {
+      // Re-throw o erro para ser capturado pelo AuthContext
+      throw error;
+    }
+  },
+
+  // Registro do usuário
+  register: async (data: RegisterRequest): Promise<LoginResponse> => {
+    try {
+      const response = await api.post<LoginResponse>('/auth/register', data);
       return response.data;
     } catch (error: any) {
       // Re-throw o erro para ser capturado pelo AuthContext
