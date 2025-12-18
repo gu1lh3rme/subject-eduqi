@@ -86,7 +86,6 @@ export default function QuestionForm({ onSuccess, onCancel, questionToEdit }: Qu
   const validateForm = (): boolean => {
     const newErrors: { [key: string]: string } = {};
 
-    // Validação do enunciado
     if (!formData.statement || formData.statement.trim().length < 20) {
       newErrors.statement = 'O enunciado deve ter pelo menos 20 caracteres';
     }
@@ -110,19 +109,16 @@ export default function QuestionForm({ onSuccess, onCancel, questionToEdit }: Qu
       }
     });
 
-    // Verificar se há alternativas duplicadas
     const duplicates = filledAlternatives.filter((item, index) => filledAlternatives.indexOf(item) !== index);
     if (duplicates.length > 0) {
       newErrors.alternatives = 'As alternativas não podem ser iguais entre si';
     }
 
-    // Validação do assunto
     if (!formData.subjectId) {
       newErrors.subjectId = 'O assunto é obrigatório';
     }
 
-    // Validação da dificuldade
-    if (!formData.difficulty || formData.difficulty.trim() === '') {
+    if (!formData.difficulty) {
       newErrors.difficulty = 'A dificuldade é obrigatória';
     }
 
@@ -136,7 +132,6 @@ export default function QuestionForm({ onSuccess, onCancel, questionToEdit }: Qu
       [field]: value
     }));
 
-    // Limpar erro específico quando campo for preenchido
     if (errors[field]) {
       setErrors(prev => ({
         ...prev,
@@ -144,7 +139,6 @@ export default function QuestionForm({ onSuccess, onCancel, questionToEdit }: Qu
       }));
     }
 
-    // Limpar erro de alternativas duplicadas quando qualquer alternativa for alterada
     if (field.startsWith('alternative') && errors.alternatives) {
       setErrors(prev => ({
         ...prev,
@@ -188,7 +182,7 @@ export default function QuestionForm({ onSuccess, onCancel, questionToEdit }: Qu
       correctAlternative: formData.correctAlternative,
       subjectId: formData.subjectId!,
       subtopicId: formData.subtopicId,
-      difficulty: formData.difficulty.trim(),
+      difficulty: formData.difficulty,
       status: formData.status,
     };
 
@@ -196,19 +190,16 @@ export default function QuestionForm({ onSuccess, onCancel, questionToEdit }: Qu
       let result;
       
       if (questionToEdit) {
-        // Editando questão existente
         result = await updateQuestion({
           id: questionToEdit.id,
           ...questionData,
         });
       } else {
-        // Criando nova questão
         result = await createQuestion(questionData);
       }
       
       if (result.meta.requestStatus === 'fulfilled') {
         if (!questionToEdit) {
-          // Reset form only for new questions
           setFormData({
             statement: '',
             alternativeA: '',
@@ -217,7 +208,7 @@ export default function QuestionForm({ onSuccess, onCancel, questionToEdit }: Qu
             alternativeD: '',
             alternativeE: '',
             correctAlternative: 'A',
-            difficulty: '',
+            difficulty: 'Fácil',
             status: 'rascunho',
             subjectId: undefined,
             subtopicId: undefined,
@@ -244,7 +235,7 @@ export default function QuestionForm({ onSuccess, onCancel, questionToEdit }: Qu
       alternativeD: '',
       alternativeE: '',
       correctAlternative: 'A',
-      difficulty: '',
+      difficulty: 'Fácil',
       status: 'rascunho',
       subjectId: undefined,
       subtopicId: undefined,
@@ -348,15 +339,24 @@ export default function QuestionForm({ onSuccess, onCancel, questionToEdit }: Qu
           <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
             {/* Dificuldade */}
             <Box sx={{ flex: '1 1 300px', minWidth: '250px' }}>
-              <TextField
-                fullWidth
-                label="Dificuldade"
-                value={formData.difficulty}
-                onChange={(e) => handleInputChange('difficulty', e.target.value)}
-                error={!!errors.difficulty}
-                helperText={errors.difficulty || 'Ex: Fácil, Médio, Difícil'}
-                required
-              />
+              <FormControl fullWidth error={!!errors.difficulty}>
+                <InputLabel>Dificuldade</InputLabel>
+                <Select
+                  value={formData.difficulty}
+                  label="Dificuldade"
+                  onChange={(e) => handleInputChange('difficulty', e.target.value)}
+                  required
+                >
+                  <MenuItem value="Fácil">Fácil</MenuItem>
+                  <MenuItem value="Média">Média</MenuItem>
+                  <MenuItem value="Difícil">Difícil</MenuItem>
+                </Select>
+                {errors.difficulty && (
+                  <Typography variant="caption" color="error" sx={{ mt: 0.5, ml: 2 }}>
+                    {errors.difficulty}
+                  </Typography>
+                )}
+              </FormControl>
             </Box>
 
             {/* Status */}
